@@ -26,12 +26,13 @@ void q_free(queue_t *q)
     /* Free queue structure */
     if (!q)
         return;
+    list_ele_t *tmp;
     while (q->head) {
-        list_ele_t *tmp = q->head->next;
+        tmp = q->head->next;
+        free(q->head->value);
         free(q->head);
         q->head = tmp;
     }
-    free(q->tail);
     free(q);
 }
 
@@ -107,10 +108,22 @@ bool q_insert_tail(queue_t *q, char *s)
  */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
-    /* TODO: You need to fix up this code. */
     if (!q || q->size < 1)
         return false;
-    q->head = q->head->next;
+    if (sp) {
+        size_t size = (bufsize > strlen(q->head->value))
+                          ? strlen(q->head->value)
+                          : (bufsize - 1);
+
+        memcpy(sp, q->head->value, size);
+        sp[size] = '\0';
+    }
+
+    list_ele_t *tmp = q->head->next;
+    free(q->head->value);
+    free(q->head);
+    q->head = tmp;
+    q->size--;
     return true;
 }
 
@@ -120,7 +133,7 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
  */
 int q_size(queue_t *q)
 {
-    return (q == NULL) ? 0 : q->size;
+    return q ? q->size : 0;
 }
 
 /*

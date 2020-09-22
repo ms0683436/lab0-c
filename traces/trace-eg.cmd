@@ -14,6 +14,8 @@ it meerkat
 it bear
 # Reverse it
 reverse
+# Remove at the head
+rh bear
 # See how long it is
 size
 # Delete queue.  Goes back to a NULL queue.
