@@ -12,6 +12,8 @@ ih gerbil
 # Now at the tail
 it meerkat
 it bear
+# Sort it
+sort
 # Reverse it
 reverse
 # Remove at the head

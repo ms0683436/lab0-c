@@ -5,6 +5,8 @@
 #include "harness.h"
 #include "queue.h"
 
+void merge_sort(list_ele_t **head);
+
 /*
  * Create empty queue.
  * Return NULL if could not allocate space.
@@ -168,4 +170,56 @@ void q_sort(queue_t *q)
 {
     /* TODO: You need to write the code for this function */
     /* TODO: Remove the above comment when you are about to implement. */
+    if (!q || q->size <= 1)
+        return;
+    merge_sort(&q->head);
+    while (q->tail->next) {
+        q->tail = q->tail->next;
+    }
+}
+
+/*
+ * Divide queue from mid
+ * Original ELE will be cut
+ * Return mid ELE
+ */
+list_ele_t *divide_mid_ele(list_ele_t **head)
+{
+    list_ele_t *one = *head;
+    list_ele_t *jump = (*head)->next;
+    while (jump && jump->next) {
+        jump = jump->next->next;
+        one = one->next;
+    }
+    list_ele_t *mid = one->next;
+    one->next = NULL;
+    return mid;
+}
+
+list_ele_t *merge(list_ele_t *list1, list_ele_t *list2)
+{
+    if (!list1)
+        return list2;
+    if (!list2)
+        return list1;
+    size_t len_l1 = strlen(list1->value), len_l2 = strlen(list1->value);
+    if (len_l1 < len_l2)
+        len_l1 = len_l2;
+    if (strncmp(list1->value, list2->value, len_l1) < 0) {
+        list1->next = merge(list1->next, list2);
+        return list1;
+    } else {
+        list2->next = merge(list2->next, list1);
+        return list2;
+    }
+}
+
+void merge_sort(list_ele_t **head)
+{
+    if (!(*head) || !(*head)->next)
+        return;
+    list_ele_t *mid = divide_mid_ele(head);
+    merge_sort(head);
+    merge_sort(&mid);
+    *head = merge(*head, mid);
 }
