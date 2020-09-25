@@ -168,8 +168,6 @@ void q_reverse(queue_t *q)
  */
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
     if (!q || q->size <= 1)
         return;
     merge_sort(&q->head);
@@ -191,9 +189,9 @@ list_ele_t *divide_mid_ele(list_ele_t **head)
         jump = jump->next->next;
         one = one->next;
     }
-    list_ele_t *mid = one->next;
+    jump = one->next;
     one->next = NULL;
-    return mid;
+    return jump;
 }
 
 list_ele_t *merge(list_ele_t *list1, list_ele_t *list2)
@@ -202,16 +200,28 @@ list_ele_t *merge(list_ele_t *list1, list_ele_t *list2)
         return list2;
     if (!list2)
         return list1;
-    size_t len_l1 = strlen(list1->value), len_l2 = strlen(list1->value);
-    if (len_l1 < len_l2)
-        len_l1 = len_l2;
-    if (strncmp(list1->value, list2->value, len_l1) < 0) {
-        list1->next = merge(list1->next, list2);
-        return list1;
-    } else {
-        list2->next = merge(list2->next, list1);
-        return list2;
+    // Recursive
+    // if (strcmp(list1->value, list2->value) < 0) {
+    //     list1->next = merge(list1->next, list2);
+    //     return list1;
+    // } else {
+    //     list2->next = merge(list2->next, list1);
+    //     return list2;
+    // }
+    list_ele_t *result = NULL;
+    list_ele_t **head = &result;
+    while (list1 || list2) {
+        if (strcmp(list1->value, list2->value) < 0) {
+            *head = list1;
+            list1 = list1->next;
+        } else {
+            *head = list2;
+            list2 = list2->next;
+        }
+        head = &(*head)->next;
     }
+    *head = list1 ? list1 : list2;
+    return result;
 }
 
 void merge_sort(list_ele_t **head)
