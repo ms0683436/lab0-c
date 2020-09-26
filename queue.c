@@ -200,7 +200,7 @@ list_ele_t *merge(list_ele_t *list1, list_ele_t *list2)
         return list2;
     if (!list2)
         return list1;
-    // Recursive
+    // Recursive test 15 will fail
     // if (strcmp(list1->value, list2->value) < 0) {
     //     list1->next = merge(list1->next, list2);
     //     return list1;
@@ -208,10 +208,10 @@ list_ele_t *merge(list_ele_t *list1, list_ele_t *list2)
     //     list2->next = merge(list2->next, list1);
     //     return list2;
     // }
-    list_ele_t *result = NULL;
+    list_ele_t *result = list1;
     list_ele_t **head = &result;
-    while (list1 || list2) {
-        if (strcmp(list1->value, list2->value) < 0) {
+    while (list1 && list2) {
+        if (strcmp(list1->value, list2->value) <= 0) {
             *head = list1;
             list1 = list1->next;
         } else {
