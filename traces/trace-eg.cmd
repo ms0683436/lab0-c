@@ -17,7 +17,7 @@ sort
 # Reverse it
 reverse
 # Remove at the head
-rh bear
+rh meerkat
 # See how long it is
 size
 # Delete queue.  Goes back to a NULL queue.
